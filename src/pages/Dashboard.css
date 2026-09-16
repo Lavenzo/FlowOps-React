@@ -1,0 +1,271 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+/* Summary Cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .summary-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.card-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Table Section */
+.table-section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filter-input,
+.filter-select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.btn-secondary {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #f9fafb;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.requests-table th {
+  background-color: #f9fafb;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.requests-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.requests-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.requests-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.font-medium {
+  font-weight: 500;
+  color: #111827;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem !important;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.btn-view {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #2563eb;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view:hover {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-gray {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.badge-blue {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.badge-yellow {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.badge-green {
+  background-color: #dcfce3;
+  color: #15803d;
+}
+
+.badge-purple {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+}
+
+.badge-red {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-orange {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+/* Request Details Modal Content */
+.request-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .detail-row {
+    flex-direction: row;
+  }
+  .detail-label {
+    width: 150px;
+    flex-shrink: 0;
+  }
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.description-text {
+  line-height: 1.5;
+}
+
+.modal-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+}
