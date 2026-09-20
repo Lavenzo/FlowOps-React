@@ -6,8 +6,18 @@ export default function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState(() => localStorage.getItem('flowops_remembered_username') || '');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('flowops_remembered_username'));
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isRememberedUser, setIsRememberedUser] = useState(() => !!localStorage.getItem('flowops_remembered_username'));
   const [error, setError] = useState('');
+
+  const handleSwitchUser = () => {
+    localStorage.removeItem('flowops_remembered_username');
+    setUsername('');
+    setPassword('');
+    setIsRememberedUser(false);
+    setRememberMe(false);
+    setError('');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,13 +59,27 @@ export default function Login({ onLoginSuccess }) {
 
           <div className="form-group">
             <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                readOnly={isRememberedUser}
+                style={{ flex: 1 }}
+              />
+              {isRememberedUser && (
+                <button
+                  type="button"
+                  onClick={handleSwitchUser}
+                  className="btn-secondary"
+                  style={{ padding: '0.5rem 0.75rem', fontSize: '0.875rem' }}
+                >
+                  Switch User
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="form-group">
