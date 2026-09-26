@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getCurrentUser } from './utils/auth';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Requests from './pages/Requests';
 import Layout from './components/Layout';
 import Placeholder from './components/Placeholder';
 import './App.css';
@@ -29,7 +30,7 @@ function App() {
       case 'dashboard':
         return <Dashboard />;
       case 'requests':
-        return <Placeholder title="Requests" />;
+        return <Requests />;
       case 'create':
         return <Placeholder title="Create Request" />;
       case 'approvals':

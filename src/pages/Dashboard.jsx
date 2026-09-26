@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { REQUESTS } from '../data/requests';
-import Modal from '../components/Modal';
+import RequestDetailsModal from '../components/RequestDetailsModal';
+import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -45,29 +46,6 @@ export default function Dashboard() {
 
   const closeModal = () => {
     setSelectedRequest(null);
-  };
-
-  const getStatusClass = (status) => {
-    const map = {
-      'Draft': 'badge-gray',
-      'Submitted': 'badge-blue',
-      'Pending Approval': 'badge-yellow',
-      'Approved': 'badge-green',
-      'In Progress': 'badge-purple',
-      'Completed': 'badge-green',
-      'Rejected': 'badge-red',
-    };
-    return map[status] || 'badge-gray';
-  };
-
-  const getPriorityClass = (priority) => {
-    const map = {
-      'Low': 'badge-gray',
-      'Medium': 'badge-blue',
-      'High': 'badge-orange',
-      'Critical': 'badge-red',
-    };
-    return map[priority] || 'badge-gray';
   };
 
   return (
@@ -198,55 +176,7 @@ export default function Dashboard() {
       </div>
 
       {/* Request Details Modal */}
-      {selectedRequest && (
-        <Modal onClose={closeModal} title="Request Details">
-          <div className="request-details">
-            <div className="detail-row">
-              <span className="detail-label">Request ID:</span>
-              <span className="detail-value font-medium">{selectedRequest.id}</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Request Type:</span>
-              <span className="detail-value">{selectedRequest.type}</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Title:</span>
-              <span className="detail-value">{selectedRequest.title}</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Description:</span>
-              <span className="detail-value description-text">{selectedRequest.description}</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Submitted Date:</span>
-              <span className="detail-value">{selectedRequest.submittedDate}</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Status:</span>
-              <span className="detail-value">
-                <span className={`badge ${getStatusClass(selectedRequest.status)}`}>
-                  {selectedRequest.status}
-                </span>
-              </span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Priority:</span>
-              <span className="detail-value">
-                <span className={`badge ${getPriorityClass(selectedRequest.priority)}`}>
-                  {selectedRequest.priority}
-                </span>
-              </span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Requester:</span>
-              <span className="detail-value">{selectedRequest.requester}</span>
-            </div>
-          </div>
-          <div className="modal-actions">
-             <button onClick={closeModal} className="btn-secondary">Close</button>
-          </div>
-        </Modal>
-      )}
+      <RequestDetailsModal request={selectedRequest} onClose={closeModal} />
     </div>
   );
 }
