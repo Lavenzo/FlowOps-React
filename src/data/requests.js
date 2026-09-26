@@ -100,3 +100,37 @@ export const REQUESTS = [
     requester: 'employee01',
   }
 ];
+
+export const ALL_REQUESTS = [
+  ...REQUESTS,
+  { id: 'REQ-2026-011', type: 'Access Request', title: 'Jira Project Admin Access', description: 'Need admin rights for the new Alpha project.', submittedDate: '2026-02-20', status: 'Approved', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-012', type: 'Service Request', title: 'Ergonomic Keyboard', description: 'Requesting a split ergonomic keyboard.', submittedDate: '2026-02-21', status: 'Pending Approval', priority: 'Low', requester: 'processor01' },
+  { id: 'REQ-2026-013', type: 'Account Maintenance', title: 'Name Change Request', description: 'Update legal name in HR systems.', submittedDate: '2026-02-21', status: 'Completed', priority: 'High', requester: 'approver01' },
+  { id: 'REQ-2026-014', type: 'Operational Change', title: 'Server Patching', description: 'Apply security patches to web cluster.', submittedDate: '2026-02-22', status: 'In Progress', priority: 'Critical', requester: 'processor01' },
+  { id: 'REQ-2026-015', type: 'Access Request', title: 'AWS Console Access', description: 'Read-only access to AWS S3 buckets.', submittedDate: '2026-02-23', status: 'Submitted', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-016', type: 'Service Request', title: 'Headset Replacement', description: 'Current headset mic is broken.', submittedDate: '2026-02-24', status: 'Draft', priority: 'Low', requester: 'approver01' },
+  { id: 'REQ-2026-017', type: 'Operational Change', title: 'Firewall Rule Update', description: 'Open port 443 for new service.', submittedDate: '2026-02-24', status: 'Pending Approval', priority: 'High', requester: 'processor01' },
+  { id: 'REQ-2026-018', type: 'Account Maintenance', title: 'Onboard New Contractor', description: 'Setup AD account and email for Jane Smith.', submittedDate: '2026-02-25', status: 'Completed', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-019', type: 'Access Request', title: 'Tableau License', description: 'Viewer license required for Q1 reporting.', submittedDate: '2026-02-25', status: 'Approved', priority: 'Low', requester: 'employee01' },
+  { id: 'REQ-2026-020', type: 'Service Request', title: 'MacBook Pro Upgrade', description: 'Due for a hardware refresh.', submittedDate: '2026-02-26', status: 'Rejected', priority: 'Medium', requester: 'processor01' },
+  { id: 'REQ-2026-021', type: 'Operational Change', title: 'DNS Record Update', description: 'Add CNAME for marketing campaign.', submittedDate: '2026-02-26', status: 'Completed', priority: 'Low', requester: 'approver01' },
+  { id: 'REQ-2026-022', type: 'Access Request', title: 'GitHub Copilot', description: 'Requesting Copilot license for development.', submittedDate: '2026-02-27', status: 'In Progress', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-023', type: 'Account Maintenance', title: 'Department Transfer', description: 'Move user from Sales to Marketing group.', submittedDate: '2026-02-28', status: 'Pending Approval', priority: 'High', requester: 'processor01' },
+  { id: 'REQ-2026-024', type: 'Service Request', title: 'Standing Desk', description: 'Medical accommodation request.', submittedDate: '2026-03-01', status: 'Approved', priority: 'High', requester: 'employee01' },
+  { id: 'REQ-2026-025', type: 'Operational Change', title: 'Database Backup Restore', description: 'Restore staging DB from last night\'s snapshot.', submittedDate: '2026-03-01', status: 'Completed', priority: 'Critical', requester: 'approver01' },
+  { id: 'REQ-2026-026', type: 'Access Request', title: 'Slack Admin Rights', description: 'Need to configure new integrations.', submittedDate: '2026-03-02', status: 'Rejected', priority: 'Medium', requester: 'processor01' },
+  { id: 'REQ-2026-027', type: 'Service Request', title: 'Software Request: Figma', description: 'Design tool needed for UI mockup review.', submittedDate: '2026-03-02', status: 'Submitted', priority: 'Low', requester: 'employee01' },
+  { id: 'REQ-2026-028', type: 'Account Maintenance', title: 'Reset 2FA Token', description: 'Lost phone, need new MFA setup.', submittedDate: '2026-03-03', status: 'Completed', priority: 'High', requester: 'employee01' },
+  { id: 'REQ-2026-029', type: 'Operational Change', title: 'Deploy Frontend v2.1', description: 'Scheduled production deployment.', submittedDate: '2026-03-03', status: 'Pending Approval', priority: 'Critical', requester: 'processor01' },
+  { id: 'REQ-2026-030', type: 'Access Request', title: 'Figma Enterprise Seat', description: 'Full edit access for new designer.', submittedDate: '2026-03-04', status: 'Approved', priority: 'Medium', requester: 'approver01' },
+  { id: 'REQ-2026-031', type: 'Service Request', title: 'Whiteboard Installation', description: 'Install new whiteboard in Conf Room C.', submittedDate: '2026-03-04', status: 'Draft', priority: 'Low', requester: 'employee01' },
+  { id: 'REQ-2026-032', type: 'Account Maintenance', title: 'Update Title', description: 'Promotion to Senior Developer.', submittedDate: '2026-03-05', status: 'In Progress', priority: 'Low', requester: 'processor01' },
+  { id: 'REQ-2026-033', type: 'Operational Change', title: 'Renew Domain Name', description: 'Auto-renewal failed for secondary domain.', submittedDate: '2026-03-05', status: 'Completed', priority: 'High', requester: 'approver01' },
+  { id: 'REQ-2026-034', type: 'Access Request', title: 'Zoom Pro License', description: 'Need longer meeting times for external clients.', submittedDate: '2026-03-06', status: 'Pending Approval', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-035', type: 'Service Request', title: 'Mouse Replacement', description: 'Wireless mouse battery is dead.', submittedDate: '2026-03-06', status: 'Completed', priority: 'Low', requester: 'employee01' },
+  { id: 'REQ-2026-036', type: 'Account Maintenance', title: 'Terminated Employee Cleanup', description: 'Disable all accounts for John Smith.', submittedDate: '2026-03-07', status: 'Pending Approval', priority: 'Critical', requester: 'processor01' },
+  { id: 'REQ-2026-037', type: 'Operational Change', title: 'Load Balancer Config', description: 'Add new node to target group.', submittedDate: '2026-03-07', status: 'Approved', priority: 'High', requester: 'approver01' },
+  { id: 'REQ-2026-038', type: 'Access Request', title: 'Docker Hub Pro', description: 'Increased rate limits needed.', submittedDate: '2026-03-08', status: 'In Progress', priority: 'Medium', requester: 'employee01' },
+  { id: 'REQ-2026-039', type: 'Service Request', title: 'Network Cable', description: 'Need a longer ethernet cable for desk.', submittedDate: '2026-03-08', status: 'Rejected', priority: 'Low', requester: 'processor01' },
+  { id: 'REQ-2026-040', type: 'Account Maintenance', title: 'Create Service Account', description: 'For automated CI/CD pipeline.', submittedDate: '2026-03-09', status: 'Submitted', priority: 'Medium', requester: 'approver01' }
+];

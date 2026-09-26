@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { REQUESTS } from '../data/requests';
+import { ALL_REQUESTS } from '../data/requests';
 import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Requests.css';
@@ -11,17 +11,20 @@ export default function Requests() {
   const [typeFilter, setTypeFilter] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: 'submittedDate', direction: 'desc' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleClearFilters = () => {
     setSearchQuery('');
     setStatusFilter('');
     setPriorityFilter('');
     setTypeFilter('');
+    setCurrentPage(1);
   };
 
   // Get unique request types for the dropdown
   const requestTypes = useMemo(() => {
-    const types = new Set(REQUESTS.map(req => req.type));
+    const types = new Set(ALL_REQUESTS.map(req => req.type));
     return Array.from(types).sort();
   }, []);
 
@@ -31,12 +34,13 @@ export default function Requests() {
       direction = 'desc';
     }
     setSortConfig({ key, direction });
+    setCurrentPage(1);
   };
 
   const priorityOrder = useMemo(() => ({ 'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1 }), []);
 
   const filteredAndSortedRequests = useMemo(() => {
-    let filtered = REQUESTS.filter(req => {
+    let filtered = ALL_REQUESTS.filter(req => {
       const matchesSearch =
         req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         req.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -49,6 +53,15 @@ export default function Requests() {
     });
 
     return filtered.sort((a, b) => {
+      // Custom priority sorting
+      if (sortConfig.key === 'priority') {
+          const aPriority = priorityOrder[a.priority] || 0;
+          const bPriority = priorityOrder[b.priority] || 0;
+          if (aPriority < bPriority) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (aPriority > bPriority) return sortConfig.direction === 'asc' ? 1 : -1;
+          return 0;
+      }
+
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === 'asc' ? -1 : 1;
       }
@@ -56,17 +69,16 @@ export default function Requests() {
         return sortConfig.direction === 'asc' ? 1 : -1;
       }
 
-      // Custom priority sorting
-      if (sortConfig.key === 'priority') {
-          const aPriority = priorityOrder[a.priority] || 0;
-          const bPriority = priorityOrder[b.priority] || 0;
-          if (aPriority < bPriority) return sortConfig.direction === 'asc' ? -1 : 1;
-          if (aPriority > bPriority) return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-
       return 0;
     });
   }, [searchQuery, statusFilter, priorityFilter, typeFilter, sortConfig, priorityOrder]);
+
+  const totalPages = Math.ceil(filteredAndSortedRequests.length / itemsPerPage);
+
+  const paginatedRequests = useMemo(() => {
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    return filteredAndSortedRequests.slice(startIdx, startIdx + itemsPerPage);
+  }, [filteredAndSortedRequests, currentPage, itemsPerPage]);
 
   return (
     <div className="requests-container">
@@ -82,14 +94,20 @@ export default function Requests() {
               type="text"
               placeholder="Search ID or Title..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
               className="filter-input"
               aria-label="Search Requests"
             />
 
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1);
+              }}
               className="filter-select"
               aria-label="Filter by Status"
             >
@@ -103,7 +121,10 @@ export default function Requests() {
 
             <select
               value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
+              onChange={(e) => {
+                setPriorityFilter(e.target.value);
+                setCurrentPage(1);
+              }}
               className="filter-select"
               aria-label="Filter by Priority"
             >
@@ -116,7 +137,10 @@ export default function Requests() {
 
             <select
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
+              onChange={(e) => {
+                setTypeFilter(e.target.value);
+                setCurrentPage(1);
+              }}
               className="filter-select"
               aria-label="Filter by Request Type"
             >
@@ -174,8 +198,8 @@ export default function Requests() {
               </tr>
             </thead>
             <tbody>
-              {filteredAndSortedRequests.length > 0 ? (
-                filteredAndSortedRequests.map(req => (
+              {paginatedRequests.length > 0 ? (
+                paginatedRequests.map(req => (
                   <tr key={req.id}>
                     <td className="font-medium">{req.id}</td>
                     <td>{req.type}</td>
@@ -213,6 +237,44 @@ export default function Requests() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination UI */}
+        {filteredAndSortedRequests.length > 0 && (
+          <div className="pagination-container">
+            <div className="pagination-info">
+              Showing {(currentPage - 1) * itemsPerPage + 1}-
+              {Math.min(currentPage * itemsPerPage, filteredAndSortedRequests.length)} of{' '}
+              {filteredAndSortedRequests.length} requests
+            </div>
+            <div className="pagination-controls">
+              <button
+                className="btn-pagination"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  className={`btn-pagination-page ${currentPage === page ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                className="btn-pagination"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <RequestDetailsModal request={selectedRequest} onClose={() => setSelectedRequest(null)} />
