@@ -4,15 +4,17 @@ import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Dashboard.css';
 
-export default function Dashboard() {
+export default function Dashboard({ newRequests = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
+  const combinedRequests = useMemo(() => [...newRequests, ...REQUESTS], [newRequests]);
+
   // Filtered requests based on search and dropdowns
   const filteredRequests = useMemo(() => {
-    return REQUESTS.filter(req => {
+    return combinedRequests.filter(req => {
       const matchesSearch =
         req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         req.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -22,17 +24,17 @@ export default function Dashboard() {
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
-  }, [searchQuery, statusFilter, priorityFilter]);
+  }, [searchQuery, statusFilter, priorityFilter, combinedRequests]);
 
   // Summary counts based on ALL requests (not filtered ones)
   const summaryCounts = useMemo(() => {
     return {
-      open: REQUESTS.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
-      pending: REQUESTS.filter(r => r.status === 'Pending Approval').length,
-      inProgress: REQUESTS.filter(r => r.status === 'In Progress').length,
-      completed: REQUESTS.filter(r => r.status === 'Completed').length,
+      open: combinedRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
+      pending: combinedRequests.filter(r => r.status === 'Pending Approval').length,
+      inProgress: combinedRequests.filter(r => r.status === 'In Progress').length,
+      completed: combinedRequests.filter(r => r.status === 'Completed').length,
     };
-  }, []);
+  }, [combinedRequests]);
 
   const handleClearFilters = () => {
     setSearchQuery('');

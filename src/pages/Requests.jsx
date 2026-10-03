@@ -4,7 +4,7 @@ import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Requests.css';
 
-export default function Requests() {
+export default function Requests({ newRequests = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
@@ -22,11 +22,13 @@ export default function Requests() {
     setCurrentPage(1);
   };
 
+  const combinedRequests = useMemo(() => [...newRequests, ...ALL_REQUESTS], [newRequests]);
+
   // Get unique request types for the dropdown
   const requestTypes = useMemo(() => {
-    const types = new Set(ALL_REQUESTS.map(req => req.type));
+    const types = new Set(combinedRequests.map(req => req.type));
     return Array.from(types).sort();
-  }, []);
+  }, [combinedRequests]);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -40,7 +42,7 @@ export default function Requests() {
   const priorityOrder = useMemo(() => ({ 'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1 }), []);
 
   const filteredAndSortedRequests = useMemo(() => {
-    let filtered = ALL_REQUESTS.filter(req => {
+    let filtered = combinedRequests.filter(req => {
       const matchesSearch =
         req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         req.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -71,7 +73,7 @@ export default function Requests() {
 
       return 0;
     });
-  }, [searchQuery, statusFilter, priorityFilter, typeFilter, sortConfig, priorityOrder]);
+  }, [searchQuery, statusFilter, priorityFilter, typeFilter, sortConfig, priorityOrder, combinedRequests]);
 
   const totalPages = Math.ceil(filteredAndSortedRequests.length / itemsPerPage);
 
