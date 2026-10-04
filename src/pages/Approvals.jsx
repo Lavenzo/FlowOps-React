@@ -79,6 +79,11 @@ export default function Approvals({ user, newRequests = [], updatedRequests = {}
   };
 
   const handleAction = (action) => {
+    if (selectedRequest.requester === user.username) {
+      setCommentError('You cannot action your own request.');
+      return;
+    }
+
     if (!approvalComment.trim()) {
       setCommentError(action === 'Approve' ? 'Approval comment is required.' : 'Rejection reason is required.');
       return;
@@ -302,6 +307,8 @@ export default function Approvals({ user, newRequests = [], updatedRequests = {}
                   type="button"
                   className="btn-reject"
                   onClick={() => handleAction('Reject')}
+                  disabled={selectedRequest.requester === user.username}
+                  style={selectedRequest.requester === user.username ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                 >
                   Reject
                 </button>
@@ -309,6 +316,8 @@ export default function Approvals({ user, newRequests = [], updatedRequests = {}
                   type="button"
                   className="btn-approve"
                   onClick={() => handleAction('Approve')}
+                  disabled={selectedRequest.requester === user.username}
+                  style={selectedRequest.requester === user.username ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                 >
                   Approve
                 </button>
