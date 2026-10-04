@@ -9,8 +9,6 @@ import Layout from './components/Layout';
 import Placeholder from './components/Placeholder';
 import './App.css';
 
-import { useEffect } from 'react';
-
 function App() {
   const [user, setUser] = useState(() => getCurrentUser());
   const [currentMenu, setCurrentMenu] = useState('dashboard');
@@ -26,23 +24,26 @@ function App() {
     return saved ? JSON.parse(saved) : {};
   });
 
-  // Persist to sessionStorage on change
-  useEffect(() => {
-    sessionStorage.setItem('flowops_new_requests', JSON.stringify(newRequests));
-  }, [newRequests]);
-
-  useEffect(() => {
-    sessionStorage.setItem('flowops_updated_requests', JSON.stringify(updatedRequests));
-  }, [updatedRequests]);
+  const handleAddRequest = (req) => {
+    setNewRequests(prev => {
+      const updated = [req, ...prev];
+      sessionStorage.setItem('flowops_new_requests', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const handleUpdateRequest = (id, updates) => {
-    setUpdatedRequests(prev => ({
-      ...prev,
-      [id]: {
-        ...(prev[id] || {}),
-        ...updates
-      }
-    }));
+    setUpdatedRequests(prev => {
+      const updated = {
+        ...prev,
+        [id]: {
+          ...(prev[id] || {}),
+          ...updates
+        }
+      };
+      sessionStorage.setItem('flowops_updated_requests', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const handleLoginSuccess = (userData) => {
@@ -69,7 +70,7 @@ function App() {
         return <CreateRequest
           user={user}
           setCurrentMenu={setCurrentMenu}
-          onAddRequest={(req) => setNewRequests(prev => [req, ...prev])}
+          onAddRequest={handleAddRequest}
           newRequests={newRequests}
         />;
       case 'approvals':
