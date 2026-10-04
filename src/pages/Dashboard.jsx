@@ -4,13 +4,20 @@ import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Dashboard.css';
 
-export default function Dashboard({ newRequests = [] }) {
+export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
-  const combinedRequests = useMemo(() => [...newRequests, ...REQUESTS], [newRequests]);
+  const combinedRequests = useMemo(() => {
+    return [...newRequests, ...REQUESTS].map(req => {
+      if (updatedRequests[req.id]) {
+        return { ...req, ...updatedRequests[req.id] };
+      }
+      return req;
+    });
+  }, [newRequests, updatedRequests]);
 
   // Filtered requests based on search and dropdowns
   const filteredRequests = useMemo(() => {
