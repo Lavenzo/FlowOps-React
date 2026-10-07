@@ -4,7 +4,7 @@ import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Requests.css';
 
-export default function Requests({ newRequests = [] }) {
+export default function Requests({ newRequests = [], updatedRequests = {} }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
@@ -22,7 +22,14 @@ export default function Requests({ newRequests = [] }) {
     setCurrentPage(1);
   };
 
-  const combinedRequests = useMemo(() => [...newRequests, ...ALL_REQUESTS], [newRequests]);
+  const combinedRequests = useMemo(() => {
+    return [...newRequests, ...ALL_REQUESTS].map(req => {
+      if (updatedRequests[req.id]) {
+        return { ...req, ...updatedRequests[req.id] };
+      }
+      return req;
+    });
+  }, [newRequests, updatedRequests]);
 
   // Get unique request types for the dropdown
   const requestTypes = useMemo(() => {

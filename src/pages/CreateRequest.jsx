@@ -100,6 +100,20 @@ export default function CreateRequest({ user, setCurrentMenu, onAddRequest, newR
     setCurrentMenu('requests');
   };
 
+  if (user?.role !== 'Employee') {
+    return (
+      <div className="create-request-container">
+        <div className="restricted-access" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', textAlign: 'center' }}>
+          <div className="restricted-icon" aria-hidden="true" style={{ fontSize: '3rem', color: '#ef4444', marginBottom: '1rem' }}>🔒</div>
+          <h2 className="restricted-title" style={{ fontSize: '1.5rem', color: '#111827', marginBottom: '0.5rem' }}>Access Restricted</h2>
+          <p className="restricted-message" style={{ color: '#6b7280' }}>
+            You do not have the required permissions to create requests.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (submittedRequest) {
     return (
       <div className="create-request-container">

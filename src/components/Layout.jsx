@@ -10,7 +10,8 @@ export default function Layout({ user, currentMenu, setCurrentMenu, onLogout, ch
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'requests', label: 'Requests' },
-    { id: 'create', label: 'Create Request' },
+    // Only show Create Request if user is an Employee
+    ...(user?.role === 'Employee' ? [{ id: 'create', label: 'Create Request' }] : []),
     { id: 'approvals', label: 'Approvals' },
     { id: 'reports', label: 'Reports' },
   ];
