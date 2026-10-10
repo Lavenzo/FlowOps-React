@@ -1,17 +1,17 @@
 import { useState, useMemo } from 'react';
-import { REQUESTS } from '../data/requests';
+import { ALL_REQUESTS } from '../data/requests';
 import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Dashboard.css';
 
-export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
+export default function Dashboard({ user, newRequests = [], updatedRequests = {} }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const combinedRequests = useMemo(() => {
-    return [...newRequests, ...REQUESTS].map(req => {
+    return [...newRequests, ...ALL_REQUESTS].map(req => {
       if (updatedRequests[req.id]) {
         return { ...req, ...updatedRequests[req.id] };
       }
@@ -19,9 +19,20 @@ export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
     });
   }, [newRequests, updatedRequests]);
 
-  // Filtered requests based on search and dropdowns
+  // Determine the top 10 most recent requests based on submittedDate DESC, id DESC
+  const sortedRecentRequests = useMemo(() => {
+    const sorted = [...combinedRequests].sort((a, b) => {
+      const dateDiff = new Date(b.submittedDate) - new Date(a.submittedDate);
+      if (dateDiff !== 0) return dateDiff;
+      // Tie breaker using id
+      return b.id.localeCompare(a.id);
+    });
+    return sorted.slice(0, 10);
+  }, [combinedRequests]);
+
+  // Filtered requests based on search and dropdowns, applied ONLY to the recent 10 dataset
   const filteredRequests = useMemo(() => {
-    return combinedRequests.filter(req => {
+    return sortedRecentRequests.filter(req => {
       const matchesSearch =
         req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         req.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -31,17 +42,23 @@ export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
-  }, [searchQuery, statusFilter, priorityFilter, combinedRequests]);
+  }, [searchQuery, statusFilter, priorityFilter, sortedRecentRequests]);
 
   // Summary counts based on ALL requests (not filtered ones)
   const summaryCounts = useMemo(() => {
+    const userRequests = combinedRequests.filter(r => r.requester === user?.username);
+
+    const pendingCount = user?.role === 'Approver'
+      ? combinedRequests.filter(r => r.status === 'Pending Approval' && r.requester !== user?.username).length
+      : userRequests.filter(r => r.status === 'Pending Approval').length;
+
     return {
-      open: combinedRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
-      pending: combinedRequests.filter(r => r.status === 'Pending Approval').length,
-      inProgress: combinedRequests.filter(r => r.status === 'In Progress').length,
-      completed: combinedRequests.filter(r => r.status === 'Completed').length,
+      open: userRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
+      pending: pendingCount,
+      inProgress: userRequests.filter(r => r.status === 'In Progress').length,
+      completed: userRequests.filter(r => r.status === 'Completed').length,
     };
-  }, [combinedRequests]);
+  }, [combinedRequests, user]);
 
   const handleClearFilters = () => {
     setSearchQuery('');
@@ -62,6 +79,8 @@ export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
       <h2 className="page-title">Dashboard</h2>
 
       {/* Summary Cards */}
+      <div className="overview-section">
+        <h3>Overview</h3>
       <div className="summary-cards">
         <div className="card">
           <div className="card-title">My Open Requests</div>
@@ -79,6 +98,7 @@ export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
           <div className="card-title">Completed</div>
           <div className="card-value">{summaryCounts.completed}</div>
         </div>
+      </div>
       </div>
 
       {/* Requests Table Section */}
