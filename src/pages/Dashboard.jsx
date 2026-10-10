@@ -19,9 +19,20 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
     });
   }, [newRequests, updatedRequests]);
 
-  // Filtered requests based on search and dropdowns
+  // Determine the top 10 most recent requests based on submittedDate DESC, id DESC
+  const sortedRecentRequests = useMemo(() => {
+    const sorted = [...combinedRequests].sort((a, b) => {
+      const dateDiff = new Date(b.submittedDate) - new Date(a.submittedDate);
+      if (dateDiff !== 0) return dateDiff;
+      // Tie breaker using id
+      return b.id.localeCompare(a.id);
+    });
+    return sorted.slice(0, 10);
+  }, [combinedRequests]);
+
+  // Filtered requests based on search and dropdowns, applied ONLY to the recent 10 dataset
   const filteredRequests = useMemo(() => {
-    return combinedRequests.filter(req => {
+    return sortedRecentRequests.filter(req => {
       const matchesSearch =
         req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         req.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -31,7 +42,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
-  }, [searchQuery, statusFilter, priorityFilter, combinedRequests]);
+  }, [searchQuery, statusFilter, priorityFilter, sortedRecentRequests]);
 
   // Summary counts based on ALL requests (not filtered ones)
   const summaryCounts = useMemo(() => {
@@ -68,6 +79,8 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
       <h2 className="page-title">Dashboard</h2>
 
       {/* Summary Cards */}
+      <div className="overview-section">
+        <h3>Overview</h3>
       <div className="summary-cards">
         <div className="card">
           <div className="card-title">My Open Requests</div>
@@ -85,6 +98,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
           <div className="card-title">Completed</div>
           <div className="card-value">{summaryCounts.completed}</div>
         </div>
+      </div>
       </div>
 
       {/* Requests Table Section */}
