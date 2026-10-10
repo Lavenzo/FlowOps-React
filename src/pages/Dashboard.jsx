@@ -1,17 +1,17 @@
 import { useState, useMemo } from 'react';
-import { REQUESTS } from '../data/requests';
+import { ALL_REQUESTS } from '../data/requests';
 import RequestDetailsModal from '../components/RequestDetailsModal';
 import { getStatusClass, getPriorityClass } from '../utils/badge';
 import './Dashboard.css';
 
-export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
+export default function Dashboard({ user, newRequests = [], updatedRequests = {} }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const combinedRequests = useMemo(() => {
-    return [...newRequests, ...REQUESTS].map(req => {
+    return [...newRequests, ...ALL_REQUESTS].map(req => {
       if (updatedRequests[req.id]) {
         return { ...req, ...updatedRequests[req.id] };
       }
@@ -35,13 +35,19 @@ export default function Dashboard({ newRequests = [], updatedRequests = {} }) {
 
   // Summary counts based on ALL requests (not filtered ones)
   const summaryCounts = useMemo(() => {
+    const userRequests = combinedRequests.filter(r => r.requester === user?.username);
+
+    const pendingCount = user?.role === 'Approver'
+      ? combinedRequests.filter(r => r.status === 'Pending Approval' && r.requester !== user?.username).length
+      : userRequests.filter(r => r.status === 'Pending Approval').length;
+
     return {
-      open: combinedRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
-      pending: combinedRequests.filter(r => r.status === 'Pending Approval').length,
-      inProgress: combinedRequests.filter(r => r.status === 'In Progress').length,
-      completed: combinedRequests.filter(r => r.status === 'Completed').length,
+      open: userRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
+      pending: pendingCount,
+      inProgress: userRequests.filter(r => r.status === 'In Progress').length,
+      completed: userRequests.filter(r => r.status === 'Completed').length,
     };
-  }, [combinedRequests]);
+  }, [combinedRequests, user]);
 
   const handleClearFilters = () => {
     setSearchQuery('');

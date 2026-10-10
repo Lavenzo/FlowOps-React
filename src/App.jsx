@@ -63,7 +63,7 @@ function App() {
   const renderContent = () => {
     switch (currentMenu) {
       case 'dashboard':
-        return <Dashboard newRequests={newRequests} updatedRequests={updatedRequests} />;
+        return <Dashboard user={user} newRequests={newRequests} updatedRequests={updatedRequests} />;
       case 'requests':
         return <Requests newRequests={newRequests} updatedRequests={updatedRequests} />;
       case 'create':
@@ -85,7 +85,7 @@ function App() {
       case 'reports':
         return <Placeholder title="Reports" />;
       default:
-        return <Dashboard newRequests={newRequests} updatedRequests={updatedRequests} />;
+        return <Dashboard user={user} newRequests={newRequests} updatedRequests={updatedRequests} />;
     }
   };
 
