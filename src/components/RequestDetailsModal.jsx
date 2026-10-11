@@ -77,6 +77,44 @@ export default function RequestDetailsModal({ request, onClose }) {
             </div>
           </>
         )}
+
+        {request.processingStartedBy && (
+          <>
+            <hr style={{ margin: '1rem 0', borderColor: '#e5e7eb' }} />
+            <div className="detail-row">
+              <span className="detail-label">Processing Started By:</span>
+              <span className="detail-value">{request.processingStartedBy}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Started At:</span>
+              <span className="detail-value">{new Date(request.processingStartedAt).toLocaleString()}</span>
+            </div>
+            {request.processingStartNotes && (
+              <div className="detail-row">
+                <span className="detail-label">Start Notes:</span>
+                <span className="detail-value description-text">{request.processingStartNotes}</span>
+              </div>
+            )}
+          </>
+        )}
+
+        {request.processingCompletedBy && (
+          <>
+            <hr style={{ margin: '1rem 0', borderColor: '#e5e7eb' }} />
+            <div className="detail-row">
+              <span className="detail-label">Processing Completed By:</span>
+              <span className="detail-value">{request.processingCompletedBy}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Completed At:</span>
+              <span className="detail-value">{new Date(request.processingCompletedAt).toLocaleString()}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Resolution Notes:</span>
+              <span className="detail-value description-text">{request.resolutionNotes}</span>
+            </div>
+          </>
+        )}
       </div>
       <div className="modal-actions">
          <button onClick={onClose} className="btn-secondary">Close</button>
