@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Requests from './pages/Requests';
 import CreateRequest from './pages/CreateRequest';
 import Approvals from './pages/Approvals';
+import Processor from './pages/Processor';
 import Layout from './components/Layout';
 import Placeholder from './components/Placeholder';
 import './App.css';
@@ -76,6 +77,15 @@ function App() {
       case 'approvals':
         return (
           <Approvals
+            user={user}
+            newRequests={newRequests}
+            updatedRequests={updatedRequests}
+            onUpdateRequest={handleUpdateRequest}
+          />
+        );
+      case 'processor':
+        return (
+          <Processor
             user={user}
             newRequests={newRequests}
             updatedRequests={updatedRequests}

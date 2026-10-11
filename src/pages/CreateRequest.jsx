@@ -100,7 +100,7 @@ export default function CreateRequest({ user, setCurrentMenu, onAddRequest, newR
     setCurrentMenu('requests');
   };
 
-  if (user?.role !== 'Employee') {
+  if (user?.role !== 'Employee' && user?.role !== 'Processor') {
     return (
       <div className="create-request-container">
         <div className="restricted-access" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', textAlign: 'center' }}>
