@@ -160,6 +160,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
                 <th>Submitted Date</th>
                 <th>Status</th>
                 <th>Priority</th>
+                <th>Requester</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -181,6 +182,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
                         {req.priority}
                       </span>
                     </td>
+                    <td>{req.requester}</td>
                     <td>
                       <button
                         className="btn-view"
