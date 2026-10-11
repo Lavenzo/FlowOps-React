@@ -53,7 +53,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
       : userRequests.filter(r => r.status === 'Pending Approval').length;
 
     return {
-      open: userRequests.filter(r => ['Draft', 'Submitted', 'In Progress'].includes(r.status)).length,
+      open: userRequests.filter(r => ['Draft', 'Submitted', 'Pending Approval', 'Approved', 'In Progress'].includes(r.status)).length,
       pending: pendingCount,
       inProgress: userRequests.filter(r => r.status === 'In Progress').length,
       completed: userRequests.filter(r => r.status === 'Completed').length,
@@ -80,7 +80,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
 
       {/* Summary Cards */}
       <div className="overview-section">
-        <h3>Overview</h3>
+        <h3>Overview — Role-Based Request Summary</h3>
       <div className="summary-cards">
         <div className="card">
           <div className="card-title">My Open Requests</div>
@@ -104,7 +104,7 @@ export default function Dashboard({ user, newRequests = [], updatedRequests = {}
       {/* Requests Table Section */}
       <div className="table-section">
         <div className="table-header">
-          <h3>Recent Requests</h3>
+          <h3>Recent Requests — Latest 10 Requests (All Users)</h3>
           <div className="filters">
             <input
               type="text"
