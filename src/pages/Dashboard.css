@@ -11,6 +11,20 @@
   margin: 0;
 }
 
+/* Overview Section */
+.overview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.overview-section h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
 /* Summary Cards */
 .summary-cards {
   display: grid;

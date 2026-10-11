@@ -121,6 +121,8 @@ export default function Requests({ newRequests = [], updatedRequests = {} }) {
               aria-label="Filter by Status"
             >
               <option value="">All Statuses</option>
+              <option value="Draft">Draft</option>
+              <option value="Submitted">Submitted</option>
               <option value="Pending Approval">Pending Approval</option>
               <option value="Approved">Approved</option>
               <option value="In Progress">In Progress</option>
